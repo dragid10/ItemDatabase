@@ -7,7 +7,7 @@ This project uses python 3.12
 ```shell
 python3 -m venv .venv
 source .venv/bin/activate
-pip install -r deps/requirements.dev
+pip install -r deps/dev-requirements.in
 pip-sync requirements*
 ```
 
