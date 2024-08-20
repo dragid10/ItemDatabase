@@ -1,29 +1,37 @@
--- Create the Items table with an ENUM for item types
+-- Items table
 CREATE TABLE Items (
-    item_id INT PRIMARY KEY AUTO_INCREMENT,
+    id INTEGER PRIMARY KEY AUTOINCREMENT,  -- Use INTEGER for primary key
     name VARCHAR(255) NOT NULL,
+    barcode VARCHAR(255) NOT NULL UNIQUE,
     description TEXT,
-    quantity INT NOT NULL,
-    type ENUM('Vinyl Record', 'Comic', 'Book', 'Other') NOT NULL,
+    quantity INTEGER NOT NULL DEFAULT 1,            -- Use INTEGER for quantity
+    type VARCHAR(35) NOT NULL
+        CHECK (type IN ('Vinyl Record', 'Comic', 'Book', 'Other', 'Game', 'Technology')), -- Simulate ENUM with CHECK
     purchase_date DATE,
-    warranty_link VARCHAR(255)
+    warranty_link VARCHAR(255),
+    INDEX(barcode)
 );
 
--- Create the Friends table
+-- Friends table
 CREATE TABLE Friends (
-    friend_id INT PRIMARY KEY AUTO_INCREMENT,
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
     name VARCHAR(255) NOT NULL,
     phone_number VARCHAR(20) NOT NULL,
-    email VARCHAR(255)
+    email VARCHAR(255),
+    INDEX(phone_number),
+    INDEX(name)
 );
 
--- Create the Loans table
+-- Loans table
 CREATE TABLE Loans (
-    loan_id INT PRIMARY KEY AUTO_INCREMENT,
-    item_id INT NOT NULL,
-    friend_id INT NOT NULL,
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    item_id INTEGER NOT NULL,
+    friend_id INTEGER NOT NULL,
     borrow_date DATE NOT NULL,
     return_date DATE,
-    FOREIGN KEY (item_id) REFERENCES Items(item_id),
-    FOREIGN KEY (friend_id) REFERENCES Friends(friend_id)
+    FOREIGN KEY (item_id) REFERENCES Items(id),
+    FOREIGN KEY (friend_id) REFERENCES Friends(id),
+    INDEX(item_id),
+    INDEX(friend_id),
+    INDEX(return_date)
 );
