@@ -1,6 +1,6 @@
 # Getting started
 
-This project uses python 3.12
+This project uses python 3.12 and is still very much a WIP
 
 1. Install dependenciesd
    
