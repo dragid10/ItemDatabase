@@ -1,5 +1,7 @@
 # Getting started
 
+This project uses python 3.12
+
 1. Install dependenciesd
    
 ```shell
