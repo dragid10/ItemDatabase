@@ -14,7 +14,7 @@ pip-sync --python-executable .venv/bin/python requirements*
 2. Have a sqlite database?
 
 ```shell
-sqlite3  database.db < create_tables.sql
+touch database.db
 ```
 
 3. Run the GUI and API seperately?
