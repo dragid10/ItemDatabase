@@ -3,6 +3,8 @@
 1. Install dependenciesd
    
 ```shell
+python3 -m venv .venv
+source .venv/bin/activate
 pip install -r deps/requirements.dev
 pip-sync requirements*
 ```
