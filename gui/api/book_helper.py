@@ -1,6 +1,6 @@
 import requests
 
-from api.barcode_helper_interface import BarcodeHelper
+from gui.api.barcode_helper_interface import BarcodeHelper
 
 
 class BookHelper(BarcodeHelper):

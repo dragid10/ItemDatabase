@@ -1,11 +1,11 @@
 import requests
 
-from api.barcode_helper_interface import BarcodeHelper
+from gui.api.barcode_helper_interface import BarcodeHelper
 
 
 class ProductHelper(BarcodeHelper):
     def __init__(self):
-        self._base_url = "https://api.upcitemdb.com/prod/trial/lookup?upc="
+        self._base_url = f"https://musicbrainz.org/ws/2/release?query=barcode:%<BARCODE_FILL>%22&fmt=json&limit=1"
         self.sess = requests.Session()
 
     @property
@@ -13,7 +13,8 @@ class ProductHelper(BarcodeHelper):
         return self._base_url
 
     def lookup_barcode(self, barcode: str):
-        response = self.sess.get(f"{self.base_url}{barcode}")
+        request_url = self.base_url.replace("<BARCODE_FILL>", barcode)
+        response = self.sess.get(request_url)
 
         response.raise_for_status()
         json_response = response.json().get("items")[0]
