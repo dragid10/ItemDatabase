@@ -1,51 +1,15 @@
 from contextlib import asynccontextmanager
-from datetime import date
-from typing import List
 
 from fastapi import Depends, FastAPI
-from sqlmodel import Field, Relationship, SQLModel, Session, create_engine, select
+from sqlmodel import SQLModel, Session, create_engine, select
 
+from rest_server.models.items import Items
 
 # SQLModel Docs: https://sqlmodel.tiangolo.com/
 
 
-### Start Models ###
-
-
-class Items(SQLModel, table=True):
-    id: int | None = Field(default=None, primary_key=True)
-    name: str = Field(max_length=255)
-    barcode: str = Field(max_length=255, unique=True, index=True)
-    description: str | None = Field(max_length=500, default=None)
-    quantity: int = Field(default=1)
-    type: str = Field(max_length=50)
-    purchase_date: date | None = Field(default=None)
-    warranty_link: str | None = Field(default=None, max_length=255)
-    loans: List["Loans"] = Relationship(back_populates="item")
-
-
-class Friends(SQLModel, table=True):
-    id: int | None = Field(default=None, primary_key=True)
-    name: str = Field(max_length=255, index=True)
-    phone_number: str = Field(max_length=20, index=True)
-    email: str | None = Field(default=None, max_length=255)
-    loans: List["Loans"] = Relationship(back_populates="friend")
-
-
-class Loans(SQLModel, table=True):
-    id: int | None = Field(default=None, primary_key=True)
-    item_id: int = Field(foreign_key="items.id", index=True)
-    friend_id: int = Field(foreign_key="friends.id", index=True)
-    borrow_date: date
-    return_date: date | None = Field(default=None, index=True)
-    item: Items = Relationship(back_populates="loans")
-    friend: Friends = Relationship(back_populates="loans")
-
-
-### End Models ###
-
 ### Database Connection ###
-sqlite_file_name = "database.db"
+sqlite_file_name = "../database.db"
 sqlite_url = f"sqlite:///{sqlite_file_name}"
 
 connect_args = {"check_same_thread": False}
@@ -104,13 +68,13 @@ async def get_all_items(session: Session = Depends(get_session)):
     return items
 
 
-@app.get("/items/{item_id}")
+@app.get("/items/id/{item_id}")
 async def get_item_by_id(item_id: int, session: Session = Depends(get_session)):
     item = session.get(Items, item_id)
     return item
 
 
-@app.get("/items/{barcode}")
+@app.get("/items/barcode/{barcode}")
 async def get_item_by_barcode(barcode: str, session: Session = Depends(get_session)):
     item = session.exec(select(Items).where(Items.barcode == barcode)).first()
     return item

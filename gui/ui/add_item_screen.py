@@ -1,14 +1,13 @@
 from tkinter import *
-from tkinter import messagebox
 from tkinter.ttk import *
 
-from api.book_helper import BookHelper
-from api.item_db_client import ItemDBClient
-from api.product_helper import ProductHelper
+from gui.api.book_helper import BookHelper
+from gui.api.item_db_client import ItemDBClient
+from gui.api.product_helper import ProductHelper
 
 
 class AddItemScreen(Frame):
-    def __init__(self, parent, parent_screen=None):
+    def __init__(self, parent, parent_screen=None, db: ItemDBClient = None):
         super().__init__(parent)
         self.barcode_entry_manual = None
         self.purchase_date_entry = None
@@ -28,7 +27,7 @@ class AddItemScreen(Frame):
         self.notebook = None
         self.parent = parent
         self.parent_screen = parent_screen
-        self.db = ItemDBClient()
+        self.db = db
 
         self.setup_ui()
 
@@ -110,7 +109,7 @@ class AddItemScreen(Frame):
         ### End Barcode Add Tab ###
 
         # Back button (shared by both tabs)
-        back_button = Button(self, text="Back", command=lambda: self.parent_screen.show_frame(self.parent_screen))
+        back_button = Button(self, text="Back", command=lambda: self.parent_screen.show_frame("HomeScreen"))
         back_button.pack()
 
     def add_item_by_barcode(self):
@@ -127,7 +126,7 @@ class AddItemScreen(Frame):
 
                 product_type = "other"
                 if "vinyl" in response.get("title").casefold():
-                    product_type = "vinyl"
+                    product_type = "Vinyl Record"
 
                 # Change tab to Manual, and Add and populate fields with the response
                 self.notebook.select(0)
@@ -149,7 +148,7 @@ class AddItemScreen(Frame):
                 self.name_entry.insert(0, response.get("full_title", response.get("title")))
                 self.barcode_entry_manual.insert(0, response.get("isbn_13", [barcode])[0])
                 self.description_entry.insert(0, f"openlibrary.org{response.get('key', '')}")
-                self.type_entry.insert(0, "book")
+                self.type_entry.insert(0, "Book")
                 self.quantity_entry.insert(0, 1)
                 self.purchase_date_entry.insert(0, "")
                 self.warranty_link_entry.insert(0, "")
