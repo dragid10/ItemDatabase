@@ -4,7 +4,7 @@ This project uses python 3.12 and is still very much a WIP.
 
 Also having a barcode scanner would be ideal to get the most use out of this
 
-1. Install dependenciesd
+1. Install dependencies
    
 ```shell
 python3 -m venv .venv
